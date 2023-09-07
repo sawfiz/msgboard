@@ -8,7 +8,7 @@
   <title>Mini Message Board</title>
 </head>
 
-<body class="flex justify-center">
+<body class="flex justify-center bg-white dark:bg-gray-800">
   <div class="w-4/6">
     <h1
       class="text-center mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
@@ -48,9 +48,7 @@
       <div class="w-3/4">
         <% messages.forEach( message=> { %>
           <a href="#" class="block  p-4 m-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-            <div>
-              <%= message.added.toISOString()  %>
-            </div>
+            <p class="font-normal text-gray-700 dark:text-gray-400"> <%= message.added.toISOString()  %></p>
             <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><%= message.user %></h5>
             <p class="font-normal text-gray-700 dark:text-gray-400"> <%= message.text %></p>
         </a>
