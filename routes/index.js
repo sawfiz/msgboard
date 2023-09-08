@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 
@@ -6,21 +7,29 @@ const mongoose = require('mongoose');
 // Included because it removes preparatory warnings for Mongoose 7.
 // See: https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict
 mongoose.set('strictQuery', false);
-
-// Define the database URL to connect to.
-const mongoDB =
-  'mongodb+srv://sawfizup:jeb_pzj4nbk1QVP_avh@cluster0.ciyysqy.mongodb.net/msg_board?retryWrites=true&w=majority';
+const Message = require('../models/message');
 
 // Wait for database to connect, logging an error if there is a problem
 async function main() {
-  await mongoose.connect(mongoDB);
+  await mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   console.log('database connected');
+
+  router.get('/', async function (req, res, next) {
+    try {
+      const messages = await readCollectionToArray();
+      res.render('index', { title: 'Mini Message Board', messages: messages });
+    } catch (error) {
+      next(error); // Pass the error to the error handling middleware
+    }
+  });
 }
 
 main().catch((err) => console.log(err));
 
 // Import the Message model
-const Message = require('../models/message');
 
 async function readCollectionToArray() {
   try {
@@ -37,6 +46,7 @@ async function readCollectionToArray() {
       };
     });
 
+    console.log("🚀 ~ file: index.js:55 ~ readCollectionToArray ~ dataArray:", dataArray)
     return dataArray;
   } catch (error) {
     console.error('Error reading collection:', error);
