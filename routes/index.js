@@ -24,47 +24,13 @@ async function connectToDatabase() {
 // Connect to the database when the app starts
 connectToDatabase();
 
-// Wait for database to connect, logging an error if there is a problem
-// async function main() {
-//   await mongoose.connect(process.env.MONGODB_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   });
-//   console.log('database connected');
-
-//   router.get('/', async function (req, res, next) {
-//     try {
-//       const messages = await readCollectionToArray();
-//       res.render('index', { title: 'Mini Message Board', messages: messages });
-//     } catch (error) {
-//       next(error); // Pass the error to the error handling middleware
-//     }
-//   });
-// }
-
-// main().catch((err) => console.log(err));
-
-// Import the Message model
-
 async function readCollectionToArray() {
   try {
     // Query the collection and retrieve documents
-    const documents = await Message.find().lean(); // Use .lean() for plain JavaScript objects
-
-    // Map the collection into an array of objects
-    const dataArray = documents.map((document) => ({
-        _id: document._id,
-        user: document.user,
-        text: document.text,
-        added: document.added,
-    }));
-    return dataArray;
+    return await Message.find().lean(); // Use .lean() for plain JavaScript objects
   } catch (error) {
     console.error('Error reading collection:', error);
   }
-  // finally {
-  //   mongoose.disconnect(); // Close the database connection
-  // }
 }
 
 router.get('/', async function (req, res, next) {
